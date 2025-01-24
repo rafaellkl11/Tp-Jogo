@@ -1,19 +1,5 @@
-/**
- * teste
- *  This class is the main class of the "World of Zuul" application. 
- *  "World of Zuul" is a very simple, text based adventure game.  Users 
- *  can walk around some scenery. That's all. It should really be extended 
- *  to make it more interesting!
- * 
- *  To play this game, create an instance of this class and call the "play"
- *  method.
- * 
- *  This main class creates and initialises all the others: it creates all
- *  rooms, creates the parser and starts the game.  It also evaluates and
- *  executes the commands that the parser returns.
- * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
+/*
+Este é um jogo de autoria de Gustavo Oliveira e Rafael Chapman
  */
 
 public class Game 
@@ -56,44 +42,42 @@ public class Game
 
 
         // inicializando saídas das salas
-        medulaEspinhal.setExits("cerebro", cerebro); // inicia aqui
-        cerebro.setExits("medulaEspinhal", medulaEspinhal);
+        medulaEspinhal.setExit("cerebro", cerebro); // inicia aqui
+        cerebro.setExit("medulaEspinhal", medulaEspinhal);
 
         // sistema respiratório
-        cerebro.setExits("laringe", laringe);
-        laringe.setExits("traqueia", traqueia);
-        traqueia.setExits("pulmao", pulmao);
-        pulmao.setExits("traqueia", traqueia);
+        cerebro.setExit("laringe", laringe);
+        laringe.setExit("traqueia", traqueia);
+        traqueia.setExit("pulmao", pulmao);
+        pulmao.setExit("traqueia", traqueia);
 
         // sistema digestório
-        cerebro.setExits("faringe", faringe);
-        faringe.setExits("esofago", esofago);
-        esofago.setExits("estomago", estomago);
-        estomago.setExits("intestinoDelgado", intestinoDelgado);
-        estomago.setExits("figado", figado);
-        estomago.setExits("pancreas", pancreas);
+        cerebro.setExit("faringe", faringe);
+        faringe.setExit("esofago", esofago);
+        esofago.setExit("estomago", estomago);
+        estomago.setExit("intestinoDelgado", intestinoDelgado);
+        estomago.setExit("figado", figado);
+        estomago.setExit("pancreas", pancreas);
 
-        intestinoDelgado.setExits("intestinoGrosso", intestinoGrosso);
+        intestinoDelgado.setExit("intestinoGrosso", intestinoGrosso);
         //fim do sistema digestório
 
-        figado.setExits("estomago", estomago);
-        pancreas.setExits("estomago", estomago);
+        figado.setExit("estomago", estomago);
+        pancreas.setExit("estomago", estomago);
 
         // sistema urinário
-        medulaEspinhal.setExits("rin", rin);
-        rin.setExits("bexiga", bexiga);
-        bexiga.setExits("rin", rin);
-
+        medulaEspinhal.setExit("rin", rin);
+        rin.setExit("bexiga", bexiga);
+        bexiga.setExit("rin", rin);
 
         currentRoom = medulaEspinhal;  // o jogo começa na medula
     }
-
 
     /**
      *  Main play routine.  Loops until end of play.
      */
     public void play() 
-    {            
+    {
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -106,31 +90,24 @@ public class Game
         }
         System.out.println("Thank you for playing.  Good bye.");
     }
+    /*
+    * Localização
+    * */
 
+    private void printLocationInfo(){
+        System.out.println("Você está: " + currentRoom.getDescription());
+        System.out.print("Saídas disponíveis: " + currentRoom.getExitString());
+    }
     /**
      * Print out the opening message for the player.
      */
     private void printWelcome()
     {
         System.out.println();
-        System.out.println("Welcome to the World of Zuul!");
-        System.out.println("World of Zuul is a new, incredibly boring adventure game.");
-        System.out.println("Type 'help' if you need help.");
-        System.out.println();
-        System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("Exits: ");
-        if(currentRoom.northExit != null) {
-            System.out.print("north ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("east ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("south ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("west ");
-        }
+        System.out.println("Bem vindo ao Imunológico.exe");
+        System.out.println("Nós iremos matar um vírus >:)");
+        System.out.println("Digite 'ajuda' se precisar de ajuda");
+        printLocationInfo();
         System.out.println();
     }
 
@@ -182,51 +159,20 @@ public class Game
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
      */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
+    private void goRoom(Command command) {
+        if (!command.hasSecondWord()) {
+            // Se não houver um órgão especificado, exibe uma mensagem de erro
+            System.out.println("Ir para onde?");
             return;
         }
-
-        String direction = command.getSecondWord();
-
-        // Try to leave current room.
-        Room nextRoom = null;
-        if(direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
-        }
+        String organName = command.getSecondWord(); // Nome do órgão fornecido
+        Room nextRoom = currentRoom.getExit(organName); // Obtém a sala correspondente
 
         if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            currentRoom = nextRoom;
-            System.out.println("You are " + currentRoom.getDescription());
-            System.out.print("Exits: ");
-            if(currentRoom.northExit != null) {
-                System.out.print("north ");
-            }
-            if(currentRoom.eastExit != null) {
-                System.out.print("east ");
-            }
-            if(currentRoom.southExit != null) {
-                System.out.print("south ");
-            }
-            if(currentRoom.westExit != null) {
-                System.out.print("west ");
-            }
-            System.out.println();
+            System.out.println("Não há conexão com " + organName + "!");
+        } else {
+            currentRoom = nextRoom; // Atualiza a localização do jogador
+            printLocationInfo(); // Exibe a nova localização
         }
     }
 
