@@ -1,52 +1,27 @@
-/**
- * Class Room - a room in an adventure game.
- *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
- *
- * A "Room" represents one location in the scenery of the game.  It is 
- * connected to other rooms via exits.  The exits are labelled north, 
- * east, south, west.  For each direction, the room stores a reference
- * to the neighboring room, or null if there is no exit in that direction.
- * 
- * @author  Michael Kölling and David J. Barnes
- * @version 2016.02.29
- */
-public class Room 
-{
-    public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
+import java.util.HashMap;
 
-    /**
-     * Create a room described "description". Initially, it has
-     * no exits. "description" is something like "a kitchen" or
-     * "an open court yard".
-     * @param description The room's description.
-     */
-    public Room(String description) 
-    {
+public class Room {
+
+    private String description;
+    //usando o hashmap para podermos armazenar as salas e as suas saídas
+    private HashMap<String, Room> exits;
+
+    //criando uma sala
+    public Room(String description) {
         this.description = description;
+        this.exits = new HashMap<>();
     }
 
+    public void setExit(String direction, Room neighbor) {
+        exits.put(direction, neighbor);
+    }
 
-    public void setExits(String direction, Room neighbor)
-    {
-        /*if(north != null) {
-            northExit = north;
-        }
-        if(east != null) {
-            eastExit = east;
-        }
-        if(south != null) {
-            southExit = south;
-        }
-        if(west != null) {
-            westExit = west;
-        }*/
-        System.out.println("oi meu chapa");
+    public Room getExit(String direction) {
+        return exits.get(direction);
+    }
+
+    public String getExitString() {
+        return String.join(", ", exits.keySet()); // Lista os nomes das saídas
     }
 
     /**
@@ -56,5 +31,6 @@ public class Room
     {
         return description;
     }
+
 
 }
