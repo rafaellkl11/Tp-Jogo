@@ -31,28 +31,63 @@ public class Game
     }
 
     /**
-     * Create all the rooms and link their exits together.
+     * primeira tarefa: trocar as salas
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
-      
-        // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
-        
-        // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        Room cerebro, medulaEspinhal, pulmao, traqueia, laringe, faringe, esofago, estomago, intestinoDelgado, intestinoGrosso, figado, pancreas, rin, bexiga;
 
-        currentRoom = outside;  // start game outside
+        // as "Salas" são os órgãos, e serão organizados de cima pra baixo
+        // sistema nervoso:
+        medulaEspinhal = new Room("Seu ponto de partida, a medula espinhal");
+        cerebro = new Room("Você está no cérebro");
+        pulmao = new Room("Você está no pulmão");
+        traqueia = new Room("Você está na traqueia");
+        laringe = new Room("Você está na laringe");
+        faringe = new Room("Você está na faringe");
+        esofago = new Room("Você está no esôfago");
+        estomago = new Room("Você está no estômago");
+        intestinoDelgado = new Room("Você está no intestino delgado");
+        intestinoGrosso = new Room("Você está no intestino grosso");
+        figado = new Room("Você está no fígado");
+        pancreas = new Room("Você está no pâncreas");
+        rin = new Room("Você está no rim");
+        bexiga = new Room("Você está na bexiga");
+
+
+        // inicializando saídas das salas
+        medulaEspinhal.setExits("cerebro", cerebro); // inicia aqui
+        cerebro.setExits("medulaEspinhal", medulaEspinhal);
+
+        // sistema respiratório
+        cerebro.setExits("laringe", laringe);
+        laringe.setExits("traqueia", traqueia);
+        traqueia.setExits("pulmao", pulmao);
+        pulmao.setExits("traqueia", traqueia);
+
+        // sistema digestório
+        cerebro.setExits("faringe", faringe);
+        faringe.setExits("esofago", esofago);
+        esofago.setExits("estomago", estomago);
+        estomago.setExits("intestinoDelgado", intestinoDelgado);
+        estomago.setExits("figado", figado);
+        estomago.setExits("pancreas", pancreas);
+
+        intestinoDelgado.setExits("intestinoGrosso", intestinoGrosso);
+        //fim do sistema digestório
+
+        figado.setExits("estomago", estomago);
+        pancreas.setExits("estomago", estomago);
+
+        // sistema urinário
+        medulaEspinhal.setExits("rin", rin);
+        rin.setExits("bexiga", bexiga);
+        bexiga.setExits("rin", rin);
+
+
+        currentRoom = medulaEspinhal;  // o jogo começa na medula
     }
+
 
     /**
      *  Main play routine.  Loops until end of play.
