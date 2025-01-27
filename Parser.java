@@ -62,4 +62,9 @@ public class Parser
             return new Command(null, word2); 
         }
     }
+    
+    public String showCommands(){
+        String allCommands = commands.showAll();
+        return "Você está sozinho. E vagueia por aí \n" + allCommands;
+     }
 }
