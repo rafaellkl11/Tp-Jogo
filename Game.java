@@ -7,6 +7,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private CommandWords commandWords;
         
     /**
      * Create the game and initialise its internal map.
@@ -14,6 +15,7 @@ public class Game
     public Game() 
     {
         createRooms();
+        commandWords = new CommandWords();
         parser = new Parser();
     }
 
@@ -96,8 +98,7 @@ public class Game
     * */
 
     private void printLocationInfo(){
-        System.out.println("Você está: " + currentRoom.getDescription());
-        System.out.print("Saídas disponíveis: " + currentRoom.getExitString());
+        System.out.println(currentRoom.getLongDescription());
     }
     /**
      * Print out the opening message for the player.
@@ -122,7 +123,7 @@ public class Game
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
+            System.out.println("Tem esse comando aqui não!");
             return false;
         }
 
@@ -136,8 +137,20 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
+        else if (commandWord.equals("look")){
+            lookAround();
+        }
+        else if(commandWord.equals("eat")){
+            eat();
+        }
 
         return wantToQuit;
+    }
+    private void lookAround(){
+        System.out.println(currentRoom.getLongDescription());
+    }
+    private void eat(){
+        System.out.println("Você não está com fome agora");
     }
 
     // implementations of user commands:
@@ -149,11 +162,9 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
-        System.out.println();
-        System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        System.out.println("Você está perdido. Está sozinho.");
+        System.out.println("Os comandos disponíveis são:");
+        System.out.println(commandWords.showAll());
     }
 
     /** 
