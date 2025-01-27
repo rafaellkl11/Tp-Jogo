@@ -8,7 +8,8 @@ public class Room {
     private String description;
     //usando o hashmap para podermos armazenar as salas e as suas saídas
     private HashMap<String, Room> exits;
-    private ArrayList<String> items;
+    private ArrayList<Item> items;
+
 
     //criando uma sala
     public Room(String description) {
@@ -25,7 +26,7 @@ public class Room {
         return exits.get(direction);
     }
 
-    public void addItem(String item){
+    public void addItem(Item item){
         items.add(item);
     }
 
@@ -46,8 +47,8 @@ public class Room {
             return "Não há itens na sala";
         }
         StringBuilder itemString = new StringBuilder("Itens: ");
-        for(String item: items){
-            itemString.append(item).append(" ");
+        for(Item item: items){
+            itemString.append(item.getItemInfo()).append(" ");
         }
         return itemString.toString().trim();
     }
