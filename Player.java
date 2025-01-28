@@ -13,8 +13,7 @@ public class Player {
         Scanner teclado = new Scanner (System.in);
         name = teclado.nextLine();
         this.name = name;
-        this.currentRoom = getDefaultStartingRoom(); 
-        System.out.println(name);// Define a sala padrão como inicial
+        this.currentRoom = getDefaultStartingRoom(); // Define a sala padrão como inicial
     }
 
     /**

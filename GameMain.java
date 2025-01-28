@@ -10,10 +10,8 @@ public class GameMain
     // variáveis de instância - substitua o exemplo abaixo pelo seu próprio
     private Game game;
     private Player player;
-    /**
-     * Construtor para objetos da classe GameMain
-*/
-    public GameMain()
+
+    public void main()
     {
         Player player = new Player();
         player.getName();
