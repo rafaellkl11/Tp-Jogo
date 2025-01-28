@@ -2,11 +2,14 @@
 testando 2
 Este é um jogo de autoria de Gustavo Oliveira e Rafael Chapman
  */
-
+import java.util.Stack;
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
+    private CommandWords commandWords;
+    private Stack<Room> roomHistory; //pilha pra armazenar as salas
+
         
     /**
      * Create the game and initialise its internal map.
@@ -14,7 +17,9 @@ public class Game
     public Game() 
     {
         createRooms();
+        commandWords = new CommandWords();
         parser = new Parser();
+        roomHistory = new Stack<>();
     }
 
     /**
@@ -41,6 +46,14 @@ public class Game
         rin = new Room("Você está no rim");
         bexiga = new Room("Você está na bexiga");
 
+        // criando itens(criar mais depois
+        // também é necessário trocar o nome dos itens
+        Item item1 = new Item("Um antibiótico que tem a forma de uma espada: ", 0.5);
+        Item item2 = new Item("Um remédio que virou um escudo: ", 0.9);
+
+        //adicionando
+        cerebro.addItem(item1);
+        pulmao.addItem(item2);
 
         // inicializando saídas das salas
         medulaEspinhal.setExit("cerebro", cerebro); // inicia aqui
@@ -74,9 +87,6 @@ public class Game
         currentRoom = medulaEspinhal;  // o jogo começa na medula
     }
 
-    /**
-     *  Main play routine.  Loops until end of play.
-     */
     public void play() 
     {
         printWelcome();
@@ -89,7 +99,7 @@ public class Game
             Command command = parser.getCommand();
             finished = processCommand(command);
         }
-        System.out.println("Thank you for playing.  Good bye.");
+        System.out.println("Obrigado por jogar. Até logo.");
     }
     /*
     * Localização
@@ -121,7 +131,7 @@ public class Game
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
-            System.out.println("I don't know what you mean...");
+            System.out.println("Tem esse comando aqui não!");
             return false;
         }
 
@@ -135,11 +145,24 @@ public class Game
         else if (commandWord.equals("quit")) {
             wantToQuit = quit(command);
         }
-
+        else if (commandWord.equals("look")){
+            lookAround();
+        }
+        else if(commandWord.equals("eat")){
+            eat();
+        }
+        else if(commandWord.equals("back")){
+            goBack();
+        }
         return wantToQuit;
     }
+    private void lookAround(){
+        System.out.println(currentRoom.getLongDescription());
+    }
+    private void eat(){
+        System.out.println("Você não está com fome agora");
+    }
 
-    // implementations of user commands:
 
     /**
      * Print out some help information.
@@ -147,9 +170,10 @@ public class Game
      * command words.
      */
     private void printHelp() 
-    {   
-        Parser comandos = new Parser();
-        System.out.println(comandos.showCommands());
+    {
+        System.out.println("Você está perdido. Está sozinho.");
+        System.out.println("Os comandos disponíveis são:");
+        System.out.println(commandWords.showAll());
     }
 
     /** 
@@ -168,8 +192,19 @@ public class Game
         if (nextRoom == null) {
             System.out.println("Não há conexão com " + organName + "!");
         } else {
+            roomHistory.push(currentRoom); //empilha a sala atual
             currentRoom = nextRoom; // Atualiza a localização do jogador
             printLocationInfo(); // Exibe a nova localização
+        }
+    }
+
+    private void goBack(){
+        if (roomHistory.isEmpty()) {
+            System.out.println("Você não pode voltar. Está na sala inicial.");
+        } else {
+            currentRoom = roomHistory.pop();  // Desempilha a sala anterior
+            printLocationInfo();              // Exibe a sala de volta
+            System.out.println("Você voltou para a sala anterior.");
         }
     }
 

@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Player
+comment1.params=
+comment1.target=Player()
+comment1.text=\r\n\ Construtor\ para\ criar\ um\ jogador\ com\ nome\ e\ uma\ localiza\u00E7\u00E3o\ padr\u00E3o\ inicial.\r\n\ @param\ name\ Nome\ do\ jogador.\r\n
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment2.text=\r\n\ Retorna\ o\ nome\ do\ jogador.\r\n\ @return\ Nome\ do\ jogador.\r\n
+comment3.params=name
+comment3.target=void\ setName(java.lang.String)
+comment3.text=\r\n\ Atualiza\ o\ nome\ do\ jogador.\r\n\ @param\ name\ Novo\ nome\ do\ jogador.\r\n
+comment4.params=
+comment4.target=Room\ getCurrentRoom()
+comment4.text=\r\n\ Retorna\ a\ localiza\u00E7\u00E3o\ atual\ do\ jogador.\r\n\ @return\ Sala\ atual\ do\ jogador.\r\n
+comment5.params=room
+comment5.target=void\ setCurrentRoom(Room)
+comment5.text=\r\n\ Atualiza\ a\ localiza\u00E7\u00E3o\ atual\ do\ jogador.\r\n\ @param\ room\ Nova\ sala\ do\ jogador.\r\n
+comment6.params=
+comment6.target=Room\ getDefaultStartingRoom()
+comment6.text=\r\n\ Retorna\ a\ sala\ padr\u00E3o\ inicial\ para\ o\ jogador.\r\n\ @return\ A\ sala\ padr\u00E3o\ inicial.\r\n
+numComments=7
