@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Player {
     private String name; // Nome do jogador
+    private String local; 
     private Room currentRoom; // Localização atual do jogador
     private String [] inventario = new String [2];
     private float [] inventario2 = new float [2];
@@ -46,8 +47,9 @@ public class Player {
      * Atualiza a localização atual do jogador.
      * @param room Nova sala do jogador.
      */
-    public void setCurrentRoom(Room room) {
-        this.currentRoom = room;
+    public String setCurrentRoom(String room) {
+        local = room;
+        return local;
     }
 
     /**
@@ -61,13 +63,14 @@ public class Player {
     
     public void take(){
         Scanner teclado = new Scanner (System.in);
-        String sala = currentRoom.getDescription();
+        String sala = local;
         System.out.println("Digite qual item deseja pegar: ");
         String item = teclado.nextLine();
         System.out.println(sala);
         
         if (sala.equals("Você está no cérebro")){
             if (item.equals("antibiótico")){
+                System.out.println("Você pego o antibiótico!");
                 inventario[0] = item;
                 inventario2[0] += 0.5;
                 peso();
@@ -76,12 +79,10 @@ public class Player {
                 System.out.println("Não existe esse item");
             }
         }
-        else {
-            System.out.println("Não existe itens.");
-        }
         
-        if (sala.equals("Você está no pulmão")){
+        else if (sala.equals("Você está no pulmão")){
             if (item.equals("remédio")){
+                System.out.println("Você pego o remédio!");
                 inventario [1] = item; 
                 inventario2 [1] += 0.9;
                 peso();
@@ -119,7 +120,8 @@ public class Player {
             }
         }
     }
-    public void consuivel(){
+    
+    public void consumivel(){
         
     }
 }

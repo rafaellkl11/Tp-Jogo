@@ -174,6 +174,7 @@ public class Game
     
     private void take(){
         Player player = new Player();
+        player.setCurrentRoom(currentRoom.getDescription());
         player.take();
     }
     
