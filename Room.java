@@ -52,6 +52,7 @@ public class Room {
         }
         return itemString.toString().trim();
     }
+    
     public String getDescription()
     {
         String local = description;

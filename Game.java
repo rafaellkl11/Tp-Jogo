@@ -3,6 +3,7 @@ testando 2
 Este é um jogo de autoria de Gustavo Oliveira e Rafael Chapman
  */
 import java.util.Stack;
+import java.util.Scanner;
 public class Game 
 {
     private Parser parser;
@@ -154,6 +155,14 @@ public class Game
         else if(commandWord.equals("back")){
             goBack();
         }
+        else if(commandWord.equals("take")){
+            take();
+        }
+        
+        else if(commandWord.equals("drop")){
+            drop();
+        }
+        
         return wantToQuit;
     }
     private void lookAround(){
@@ -162,7 +171,17 @@ public class Game
     private void eat(){
         System.out.println("Você não está com fome agora");
     }
-
+    
+    private void take(){
+        Player player = new Player();
+        player.take();
+    }
+    
+    private void drop(){
+        Player player = new Player();
+        player.drop();
+    }
+    
 
     /**
      * Print out some help information.

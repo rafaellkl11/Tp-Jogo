@@ -3,15 +3,14 @@ import java.util.Scanner;
 public class Player {
     private String name; // Nome do jogador
     private Room currentRoom; // Localização atual do jogador
+    private String [] inventario = new String [2];
+    private float [] inventario2 = new float [2];
 
     /**
      * Construtor para criar um jogador com nome e uma localização padrão inicial.
      * @param name Nome do jogador.
      */
     public Player() {
-        System.out.println("Digite seu nome: ");
-        Scanner teclado = new Scanner (System.in);
-        name = teclado.nextLine();
         this.name = name;
         this.currentRoom = getDefaultStartingRoom(); // Define a sala padrão como inicial
     }
@@ -21,6 +20,9 @@ public class Player {
      * @return Nome do jogador.
      */
     public String getName() {
+        System.out.println("Digite seu nome: ");
+        Scanner teclado = new Scanner (System.in);
+        name = teclado.nextLine();
         return name;
     }
 
@@ -55,5 +57,69 @@ public class Player {
     private Room getDefaultStartingRoom() {
         // Substitua com a lógica ou referência à sala inicial padrão do jogo
         return new Room("Seu ponto de partida, a medula espinhal");
+    }
+    
+    public void take(){
+        Scanner teclado = new Scanner (System.in);
+        String sala = currentRoom.getDescription();
+        System.out.println("Digite qual item deseja pegar: ");
+        String item = teclado.nextLine();
+        System.out.println(sala);
+        
+        if (sala.equals("Você está no cérebro")){
+            if (item.equals("antibiótico")){
+                inventario[0] = item;
+                inventario2[0] += 0.5;
+                peso();
+            }
+            else {
+                System.out.println("Não existe esse item");
+            }
+        }
+        else {
+            System.out.println("Não existe itens.");
+        }
+        
+        if (sala.equals("Você está no pulmão")){
+            if (item.equals("remédio")){
+                inventario [1] = item; 
+                inventario2 [1] += 0.9;
+                peso();
+            }
+            else {
+                System.out.println("Não existe esse item");
+            }
+        }
+        else {
+            System.out.println("Não existe itens.");
+        }
+        
+    }
+    
+    public void drop(){
+        Scanner teclado = new Scanner (System.in);
+        
+        for (int i = 0 ; i < inventario.length ; i++){
+            System.out.print((i+1)+". "+inventario[i]+" ");
+        }
+        
+        System.out.println("Digite o número do item que deseja dropar: ");
+        int num = teclado.nextInt();
+        
+        inventario[(num-1)] = null;
+    }
+    
+    public void peso(){
+        if ((inventario2[0]+inventario2[1]) > 2){
+            if(inventario2[0] > 1){
+                inventario2[0] = 1;}
+                
+            if(inventario2[1] > 1){
+                inventario2[1] = 1;
+            }
+        }
+    }
+    public void consuivel(){
+        
     }
 }
