@@ -1,14 +1,15 @@
 /*
-testando 2
 Este é um jogo de autoria de Gustavo Oliveira e Rafael Chapman
  */
 import java.util.Stack;
+import java.util.Scanner;
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
     private CommandWords commandWords;
     private Stack<Room> roomHistory; //pilha pra armazenar as salas
+    private Player player;
 
         
     /**
@@ -20,13 +21,13 @@ public class Game
         commandWords = new CommandWords();
         parser = new Parser();
         roomHistory = new Stack<>();
+        this.player = new Player();
     }
 
     /**
      * primeira tarefa: trocar as salas
      */
-    private void createRooms()
-    {
+    private void createRooms() {
         Room cerebro, medulaEspinhal, pulmao, traqueia, laringe, faringe, esofago, estomago, intestinoDelgado, intestinoGrosso, figado, pancreas, rin, bexiga;
 
         // as "Salas" são os órgãos, e serão organizados de cima pra baixo
@@ -54,6 +55,10 @@ public class Game
         //adicionando
         cerebro.addItem(item1);
         pulmao.addItem(item2);
+
+        // adicionando um cogumelo
+        Item CogumeloDePeso = new Item("Cogumelo que aumenta o peso máximo que você pode carregar", 0.8);
+        cerebro.addItem(CogumeloDePeso);
 
         // inicializando saídas das salas
         medulaEspinhal.setExit("cerebro", cerebro); // inicia aqui
@@ -87,8 +92,7 @@ public class Game
         currentRoom = medulaEspinhal;  // o jogo começa na medula
     }
 
-    public void play() 
-    {
+    public void play() {
         printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -126,8 +130,7 @@ public class Game
      * @param command The command to be processed.
      * @return true If the command ends the game, false otherwise.
      */
-    private boolean processCommand(Command command) 
-    {
+    private boolean processCommand(Command command) {
         boolean wantToQuit = false;
 
         if(command.isUnknown()) {
@@ -136,33 +139,53 @@ public class Game
         }
 
         String commandWord = command.getCommandWord();
-        if (commandWord.equals("help")) {
+        if (commandWord.equals("ajuda")) {
             printHelp();
         }
-        else if (commandWord.equals("go")) {
+        else if (commandWord.equals("percorrer")) {
             goRoom(command);
         }
-        else if (commandWord.equals("quit")) {
+        else if (commandWord.equals("sair")) {
             wantToQuit = quit(command);
         }
-        else if (commandWord.equals("look")){
+        else if (commandWord.equals("olhar")){
             lookAround();
         }
-        else if(commandWord.equals("eat")){
-            eat();
+        else if(commandWord.equals("comer")){
+            player.consumivel();
         }
-        else if(commandWord.equals("back")){
+        else if(commandWord.equals("voltar")){
             goBack();
         }
+        else if(commandWord.equals("pegar")){
+            take();
+        }
+        else if(commandWord.equals("largar")){
+            drop();
+        }
+        else if(commandWord.equals("inventário")){
+            player.showItems();
+        }
+
+        
         return wantToQuit;
     }
     private void lookAround(){
         System.out.println(currentRoom.getLongDescription());
     }
-    private void eat(){
-        System.out.println("Você não está com fome agora");
-    }
 
+    
+    private void take(){
+        Player player = new Player();
+        player.setCurrentRoom(currentRoom.getDescription());
+        player.take();
+    }
+    
+    private void drop(){
+        Player player = new Player();
+        player.drop();
+    }
+    
 
     /**
      * Print out some help information.

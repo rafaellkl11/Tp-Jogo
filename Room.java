@@ -52,9 +52,11 @@ public class Room {
         }
         return itemString.toString().trim();
     }
+    
     public String getDescription()
     {
-        return description;
+        String local = description;
+        return local;
     }
 
     public String getLongDescription() {
