@@ -15,7 +15,7 @@ public class Room {
     public Room(String description) {
         this.description = description;
         this.exits = new HashMap<>();
-        this.items = new ArrayList<>();
+        this.items = new ArrayList<Item>();
     }
 
     public void setExit(String direction, Room neighbor) {
@@ -51,6 +51,11 @@ public class Room {
             itemString.append(item.getItemInfo()).append(" ");
         }
         return itemString.toString().trim();
+    }
+
+    // Retorna a lista de itens da sala
+    public ArrayList<Item> getItems() {
+        return items;
     }
     
     public String getDescription()

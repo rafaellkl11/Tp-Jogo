@@ -1,18 +1,20 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Player {
     private String name; // Nome do jogador
     private String local; 
     private Room currentRoom; // Localização atual do jogador
-    private String [] inventario = new String [2];
-    private float [] inventario2 = new float [2];
+    private ArrayList<Item> inventario; // Lista onde os itens do jogador serão armazenados
     private float cargaMaxima = 2.0f;
+    private float cargaAtual = 0.1f;
     private boolean comerCogumelo = false;
 
     //Criar nome do jogador
     public Player() {
         this.name = name;
         this.currentRoom = getDefaultStartingRoom(); // Define a sala padrão como inicial
+        this.inventario = new ArrayList<Item>();
     }
 
     /**
@@ -71,77 +73,71 @@ public class Player {
         // Substitua com a lógica ou referência à sala inicial padrão do jogo
         return new Room("Seu ponto de partida, a medula espinhal");
     }
-    
-    public void take(){
-        Scanner teclado = new Scanner (System.in);
-        String sala = local;
-        System.out.println("Digite qual item deseja pegar: ");
-        String item = teclado.nextLine();
-        System.out.println(sala);
-        
-        if (sala.equals("Você está no cérebro.")){
-            if (item.equals("antibiótico")){
-                System.out.println("Você pego o antibiótico!");
-                inventario[0] = item;
-                inventario2[0] += 0.5;
-                peso();
-            }
-            else {
-                System.out.println("Não existe esse item");
-            }
-        }
-        
-        else if (sala.equals("Você está no pulmão")){
-            if (item.equals("remédio")){
-                System.out.println("Você pego o remédio!");
-                inventario [1] = item; 
-                inventario2 [1] += 0.9;
-                peso();
-            }
-            else {
-                System.out.println("Não existe esse item");
-            }
-        }
-        else {
-            System.out.println("Não existe itens.");
-        }
-        
+
+    public float getCargaMaxima(){
+        return cargaMaxima;
     }
-    
-    public void drop(){
-        Scanner teclado = new Scanner (System.in);
-        
-        for (int i = 0 ; i < inventario.length ; i++){
-            System.out.print((i+1)+". "+inventario[i]+" ");
-        }
-        
-        System.out.println("Digite o número do item que deseja dropar: ");
-        int num = teclado.nextInt();
-        
-        inventario[(num-1)] = null;
+
+    public float getCargaAtual(){
+        return cargaAtual;
     }
-    
-    public void peso(){
-        if ((inventario2[0]+inventario2[1]) > 2){
-            if(inventario2[0] > 1){
-                inventario2[0] = 1;}
-                
-            if(inventario2[1] > 1){
-                inventario2[1] = 1;
+
+    public void setCargaAtual(float carga){
+        cargaAtual = carga;
+    }
+
+    // Método para pegar um item, levando em consideração o peso máximo
+    public void take(String itemName) {
+        Room room = currentRoom;
+        Item itemToTake = null;
+
+        // Verifica se o item existe na sala atual
+        for (Item item : room.getItems()) {
+            if (item.getDescription().equals(itemName)) {
+                itemToTake = item;
+                break;
             }
+        }
+
+        // Se o item não for encontrado
+        if (itemToTake == null) {
+            System.out.println("Item não encontrado na sala.");
+            return;
+        }
+
+        // Verifica se o peso do item pode ser adicionado ao peso atual
+        if (cargaAtual + itemToTake.getWeight() > cargaMaxima) {
+            System.out.println("Não é possível pegar esse item, o peso máximo seria excedido.");
+        } else {
+            // Adiciona o item ao inventário e atualiza o peso
+            addItem(itemToTake);
+            System.out.println("Você pegou o " + itemToTake.getDescription() + "!");
         }
     }
 
+    // Método para adicionar um item ao inventário
+    private void addItem(Item item) {
+        inventario.add(item);  // Adiciona o item ao inventário
+        cargaAtual += item.getWeight();  // Atualiza o peso atual do jogador
+    }
+
+    // Método para listar todos os itens que o jogador está carregando
     public void showItems() {
-        System.out.println("Itens no inventário: ");
-        for (int i = 0; i < inventario.length; i++) {
-            if (inventario[i] != null) {
-                System.out.println(inventario[i] + " (Peso: " + inventario2[i] + "kg)");
-            }
+        if (inventario.isEmpty()) {
+            System.out.println("Você não está carregando nenhum item.");
+            return;
         }
-        float totalWeight = inventario2[0] + inventario2[1];
+
+        System.out.println("Itens no seu inventário:");
+        float totalWeight = 0.0f;
+
+        // Exibe todos os itens e calcula o peso total
+        for (Item item : inventario) {
+            System.out.println(item.getItemInfo());
+            totalWeight += item.getWeight();
+        }
+
         System.out.println("Peso total: " + totalWeight + "kg");
     }
-
 
 }

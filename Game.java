@@ -5,6 +5,8 @@ import java.util.Stack;
 import java.util.Scanner;
 public class Game 
 {
+    private Scanner scanner = new Scanner(System.in);
+
     private Parser parser;
     private Room currentRoom;
     private CommandWords commandWords;
@@ -47,19 +49,6 @@ public class Game
         rin = new Room("Você está no rim");
         bexiga = new Room("Você está na bexiga");
 
-        // criando itens(criar mais depois
-        // também é necessário trocar o nome dos itens
-        Item item1 = new Item("Um antibiótico que tem a forma de uma espada: ", 0.5);
-        Item item2 = new Item("Um remédio que virou um escudo: ", 0.9);
-
-        //adicionando
-        cerebro.addItem(item1);
-        pulmao.addItem(item2);
-
-        // adicionando um cogumelo
-        Item CogumeloDePeso = new Item("Cogumelo que aumenta o peso máximo que você pode carregar", 0.8);
-        cerebro.addItem(CogumeloDePeso);
-
         // inicializando saídas das salas
         medulaEspinhal.setExit("cerebro", cerebro); // inicia aqui
         cerebro.setExit("medulaEspinhal", medulaEspinhal);
@@ -90,6 +79,21 @@ public class Game
         bexiga.setExit("rin", rin);
 
         currentRoom = medulaEspinhal;  // o jogo começa na medula
+
+        // aqui é onde iremos adicionar os itens e os consumíveis:
+
+        Item EspadaAntibiotica = new Item("Nome: EspadaAntibiotica ", 0.5);
+        cerebro.addItem(EspadaAntibiotica);
+
+        Item EscudoDeAmoxcilina = new Item("Nome: EscudoDeAmoxcilina ", 0.9);
+        pulmao.addItem(EscudoDeAmoxcilina);
+
+        Item AdagaDeParacetamol = new Item("Nome: AdagaDeParacetamol ", 0.1);
+        esofago.addItem(AdagaDeParacetamol);
+
+        // adicionando um cogumelo
+        Item CogumeloDePeso = new Item("Cogumelo que aumenta o peso máximo que você pode carregar", 0.8);
+        cerebro.addItem(CogumeloDePeso);
     }
 
     public void play() {
@@ -158,10 +162,12 @@ public class Game
             goBack();
         }
         else if(commandWord.equals("pegar")){
-            take();
+            System.out.println("Digite o nome do item que quer pegar: ");
+            String itemName = scanner.nextLine();  // Lê o nome do item
+            player.take(itemName);
         }
         else if(commandWord.equals("largar")){
-            drop();
+            System.out.println("Tem que largar isso aí né");
         }
         else if(commandWord.equals("inventário")){
             player.showItems();
@@ -170,22 +176,10 @@ public class Game
         
         return wantToQuit;
     }
+
     private void lookAround(){
         System.out.println(currentRoom.getLongDescription());
     }
-
-    
-    private void take(){
-        Player player = new Player();
-        player.setCurrentRoom(currentRoom.getDescription());
-        player.take();
-    }
-    
-    private void drop(){
-        Player player = new Player();
-        player.drop();
-    }
-    
 
     /**
      * Print out some help information.
